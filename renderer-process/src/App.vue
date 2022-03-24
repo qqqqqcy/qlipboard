@@ -1,26 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <TheTitle/>
+  <!-- <SearchInput/> -->
+  <HistoryList/>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue';
+<script setup>
+import TheTitle from './components/TheTitle/index.vue';
+// import SearchInput from './components/SearchInput/index.vue';
+import HistoryList from './components/HistoryList/index.vue';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld,
-  },
-};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    --radius: 5px;
+    background-color: rgba(255,255,255,.6);
+    padding: 0 10px;
+  }
 </style>
