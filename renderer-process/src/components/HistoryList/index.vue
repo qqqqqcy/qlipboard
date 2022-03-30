@@ -15,20 +15,32 @@ import { ref, onMounted } from 'vue';
 import TextItem from './components/TextItem.vue';
 import ImageItem from './components/ImageItem.vue';
 
-const { onCopyListUpdate } = window.electron;
+const { onCopyListUpdate, onChangeActiveIdx, onSelectedItem } = window.electron;
 
 const list = ref([]);
+const currentIndex = ref(0);
 
 onMounted(() => {
   onCopyListUpdate((_, copyList = []) => {
     list.value = copyList.reverse();
+    currentIndex.value = 0;
+  });
+
+  onChangeActiveIdx((_, direction) => {
+    if (direction === 0) {
+      onSelectedItem(currentIndex.value);
+      currentIndex.value = 0;
+    } else {
+      currentIndex.value = Math.min(Math.max(
+        0,
+        currentIndex.value + direction,
+      ), list.value.length - 1);
+    }
   });
 });
 
-const currentIndex = ref(0);
-
-function componentIs({ image }) {
-  if (image) {
+function componentIs({ img }) {
+  if (img) {
     return ImageItem;
   }
   return TextItem;

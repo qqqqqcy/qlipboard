@@ -1,6 +1,6 @@
 <template>
   <ItemBody type="image" :active="active">
-    <div class="text-item">
+    <div class="image-item">
       <!-- <div v-html="item.html"></div> -->
       <img :src="item.img" alt="">
     </div>
@@ -25,19 +25,11 @@ const props = defineProps({
 
 const { item, active } = toRefs(props);
 
-// const data = await fetch(item.image);
-// const blob = await data.blob();
-// const img = ref(window.URL.createObjectURL(blob));
-
 </script>
 <style scoped>
-  .text-item {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: pre-wrap;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 6;
+  .image-item {
+    overflow: scroll;
+    max-height: 10em;
   }
 
   img {
