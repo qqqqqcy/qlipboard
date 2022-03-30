@@ -1,7 +1,11 @@
 <template>
     <div class="history-list">
-        <div v-for="item in list" :key="item">
-            <component :is="componentIs(item)" :item="item"></component>
+        <div v-for="(item,index) in list" :key="item">
+            <component
+              :is="componentIs(item)"
+              :item="item"
+              :active="currentIndex===index"
+            />
         </div>
     </div>
 </template>
@@ -21,13 +25,19 @@ onMounted(() => {
   });
 });
 
+const currentIndex = ref(0);
+
 function componentIs({ image }) {
   if (image) {
     return ImageItem;
   }
   return TextItem;
 }
+
 </script>
 
 <style scoped>
+  .active {
+    box-shadow: 0 0 0 10px solid;
+  }
 </style>

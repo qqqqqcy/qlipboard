@@ -1,12 +1,10 @@
 <template>
-    <div>
-        <ItemBody type="text">
-          <div class="text-item">
-            <!-- {{item.text}} -->
-            <div v-html="item.html"></div>
-          </div>
-        </ItemBody>
+  <ItemBody type="text" :active="active">
+    <div class="text-item">
+      <!-- {{item.text}} -->
+      <div v-html="item.html"></div>
     </div>
+  </ItemBody>
 </template>
 <script setup>
 import { defineProps, toRefs } from 'vue';
@@ -19,9 +17,13 @@ const props = defineProps({
       return {};
     },
   },
+  active: {
+    typeof: Boolean,
+    default: false,
+  },
 });
 
-const { item } = toRefs(props);
+const { item, active } = toRefs(props);
 </script>
 <style scoped>
   .text-item {

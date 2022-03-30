@@ -1,12 +1,10 @@
 <template>
-    <div>
-        <ItemBody type="image">
-          <div class="text-item">
-            <!-- <div v-html="item.html"></div> -->
-            <img :src="item.img" alt="">
-          </div>
-        </ItemBody>
+  <ItemBody type="image" :active="active">
+    <div class="text-item">
+      <!-- <div v-html="item.html"></div> -->
+      <img :src="item.img" alt="">
     </div>
+  </ItemBody>
 </template>
 <script setup>
 import { defineProps, toRefs } from 'vue';
@@ -19,9 +17,13 @@ const props = defineProps({
       return {};
     },
   },
+  active: {
+    typeof: Boolean,
+    default: false,
+  },
 });
 
-const { item } = toRefs(props);
+const { item, active } = toRefs(props);
 
 // const data = await fetch(item.image);
 // const blob = await data.blob();

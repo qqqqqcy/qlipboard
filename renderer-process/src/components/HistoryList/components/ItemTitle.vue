@@ -23,8 +23,9 @@ const { type } = toRefs(props);
 <style scoped>
     .item-title {
         border-bottom:.5px solid #ddd;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         line-height: 1.6;
         color: #aaa;
+        font-size: 12px;
     }
 </style>

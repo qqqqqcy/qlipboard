@@ -1,7 +1,12 @@
 // Modules to control application life and create native browser window
 const {
-  app, BrowserWindow, globalShortcut, clipboard,
+  app,
+  clipboard,
+  BrowserWindow,
+  globalShortcut,
 } = require('electron');
+
+const robot = require('robotjs');
 const Store = require('electron-store');
 const path = require('path');
 const { setWinOnActiveScreen } = require('./utils/screenHelper');
@@ -33,11 +38,13 @@ app.whenReady().then(() => {
       win.send('copyListUpdate', copyList);
       setWinOnActiveScreen(win);
       win.show();
-      console.log(copyList);
     });
 
     win.on('blur', () => {
       win.hide();
+      setTimeout(() => {
+        robot.keyTap('v', ['command']);
+      }, 100);
     });
   });
 
@@ -57,8 +64,8 @@ app.whenReady().then(() => {
       }
       currentItem = item;
       copyList.push(item);
-      if (copyList.length > 20) {
-        copyList = copyList.slice(copyList.length - 10);
+      if (copyList.length > 100) {
+        copyList = copyList.slice(copyList.length - 50);
       }
       store.set('copyList', copyList);
     }
