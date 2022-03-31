@@ -1,5 +1,5 @@
 <template>
-    <h1>{{title}}</h1>
+    <h1>{{ title }}</h1>
 </template>
 
 <script setup>
@@ -9,10 +9,12 @@ const title = ref('QLIP BOARD');
 </script>
 
 <style scoped>
-    h1 {
-        text-align: center;
-        color: #fff;
-        font-weight: 100;
-        text-shadow: 1px 1px 3px darkslategray;
-    }
+h1 {
+    margin: 0;
+    text-align: center;
+    color: var(--mainColor);
+    font-weight: 900;
+    font-size: 45px;
+    text-shadow: -2px -2px 4px #ffffff, 2px 2px 4px #aeaec0;
+}
 </style>

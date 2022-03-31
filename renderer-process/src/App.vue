@@ -14,7 +14,8 @@ import HistoryList from './components/HistoryList/index.vue';
 <style>
   body {
     --radius: 5px;
-    background-color: rgba(255,255,255,.6);
+    --mainColor: #f0f0f3;
+    background-color: var(--mainColor);
     padding: 0 10px;
   }
 </style>

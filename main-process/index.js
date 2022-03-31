@@ -15,7 +15,6 @@ function createWin() {
     title: 'QLIP BOARD',
     frame: false,
     show: false,
-    transparent: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },

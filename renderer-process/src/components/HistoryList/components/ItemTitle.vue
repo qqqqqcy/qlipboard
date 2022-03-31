@@ -1,7 +1,5 @@
 <template>
-    <div class="item-title">
-        {{TITLE_TYPE[type]}}
-    </div>
+  <div class="item-title">{{ TITLE_TYPE[type] }}</div>
 </template>
 <script setup>
 import { defineProps, toRefs } from 'vue';
@@ -21,11 +19,15 @@ const props = defineProps({
 const { type } = toRefs(props);
 </script>
 <style scoped>
-    .item-title {
-        border-bottom:.5px solid #ddd;
-        margin-bottom: 6px;
-        line-height: 1.6;
-        color: #aaa;
-        font-size: 12px;
-    }
+.item-title {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-radius: 0 var(--radius);
+  color: #aeaec0;
+  font-size: 12px;
+  padding: 0 4px;
+  background-color: var(--mainColor);
+  z-index: 1;
+}
 </style>

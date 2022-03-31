@@ -26,13 +26,15 @@ const props = defineProps({
 const { item, active } = toRefs(props);
 </script>
 <style scoped>
-  .text-item {
-    overflow: scroll;
-    /* text-overflow: ellipsis;
+.text-item {
+  overflow: scroll;
+  /* text-overflow: ellipsis;
     white-space: pre-wrap;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 6; */
-    max-height: 10em;
-  }
+  max-height: 10em;
+  background-color: none;
+  border-radius: var(--radius);
+}
 </style>
