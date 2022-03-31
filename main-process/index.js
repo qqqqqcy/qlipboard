@@ -2,15 +2,13 @@
 const {
   app,
   ipcMain,
-  clipboard,
   BrowserWindow,
   globalShortcut,
 } = require('electron');
 
-const robot = require('robotjs');
-const Store = require('electron-store');
 const path = require('path');
 const { setWinOnActiveScreen } = require('./utils/screenHelper');
+const { ClipboardEx } = require('./utils/clipboardHelper');
 
 function createWin() {
   const mainWindow = new BrowserWindow({
@@ -29,21 +27,20 @@ function createWin() {
   return mainWindow;
 }
 
+const GLOBAL_SHORTCUT_KEY = ['Up', 'Down', 'Esc', 'Return'];
+
 function hideWin(win) {
   win.hide();
-  ['Up', 'Down', 'Esc', 'Return'].forEach((item) => globalShortcut.unregister(item));
+  GLOBAL_SHORTCUT_KEY.forEach((item) => globalShortcut.unregister(item));
 }
 
 app.whenReady().then(() => {
-  const store = new Store();
   const win = createWin();
-
-  let copyList = store.get('copyList') || [];
-  let currentItem = copyList[copyList.length - 1];
+  const clipboardEx = new ClipboardEx();
 
   win.once('ready-to-show', () => {
     globalShortcut.register('Command+Shift+V', () => {
-      win.send('copyListUpdate', copyList);
+      win.send('copyListUpdate', clipboardEx.orderCopyList);
       setWinOnActiveScreen(win);
       win.showInactive();
 
@@ -62,53 +59,15 @@ app.whenReady().then(() => {
     });
   });
 
-  ipcMain.on('selectedItem', (_event, index) => {
-    const item = copyList[copyList.length - 1 - index];
-    // 防止重复
-    if (item.imgNative) {
-      clipboard.writeImage(item.imgNative);
-    } else {
-      clipboard.writeText(item.text);
-    }
-    currentItem = item;
-    robot.keyTap('v', ['command']);
-    hideWin(win);
-    //   robot.typeString(item.text);
-    // robot.keyTap('v', ['command', 'shift']);
-    // }
+  // 测试用
+  globalShortcut.register('Command+Shift+B', () => {
+    clipboardEx.clearClipboard();
   });
-  setInterval(() => {
-    // TODO 文件
-    // TODO 去重
-    const text = clipboard.readText();
-    const html = clipboard.readHTML();
-    if (
-      (currentItem.text || text)
-        ? currentItem.text !== text
-        : (currentItem.html !== html) && html
-    ) {
-      // 过滤出图片
-      const item = {
-        text,
-        html,
-      };
-      if ((/^<meta charset='.+'><img src="(.+)"\/>$/.exec(html))?.[1]) {
-        // TODO
-        item.img = clipboard.readImage().toDataURL();
-        item.imgNative = clipboard.readImage();
-      }
-      currentItem = item;
-      copyList.push(item);
-      if (copyList.length > 100) {
-        copyList = copyList.slice(copyList.length - 50);
-      }
-      store.set('copyList', copyList);
-    }
-  }, 1000);
 
-  // app.on('activate', () => {
-  //   if (BrowserWindow.getAllWindows().length === 0) createWin();
-  // });
+  ipcMain.on('selectedItem', (_event, index) => {
+    clipboardEx.handlerItemByOrderIndex(index);
+    hideWin(win);
+  });
 });
 
 app.on('window-all-closed', () => {

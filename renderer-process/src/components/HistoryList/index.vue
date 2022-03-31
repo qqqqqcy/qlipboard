@@ -1,6 +1,6 @@
 <template>
-    <div class="history-list">
-        <div v-for="(item,index) in list" :key="item">
+    <div class="history-list" v-if="list.length">
+        <div v-for="(item,index) in list" :key="item.html + item.text">
             <component
               :is="componentIs(item)"
               :item="item"
@@ -22,7 +22,7 @@ const currentIndex = ref(0);
 
 onMounted(() => {
   onCopyListUpdate((_, copyList = []) => {
-    list.value = copyList.reverse();
+    list.value = copyList;
     currentIndex.value = 0;
   });
 
