@@ -1,12 +1,14 @@
 <template>
-  <div class="item-body" :class="{ active: active }">
-    <ItemTitle :type="type" />
+  <div ref="itemBody" class="item-body" :class="{ active: active }">
+    <ItemTitle :type="type" :index="index"/>
     <slot></slot>
   </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from 'vue';
+import {
+  defineProps, toRefs, watch, ref,
+} from 'vue';
 import ItemTitle from './ItemTitle.vue';
 
 const props = defineProps({
@@ -17,10 +19,20 @@ const props = defineProps({
     typeof: Boolean,
     default: false,
   },
+  index: {
+    typeof: Number,
+  },
 });
 
-const { type, active } = toRefs(props);
-console.log(ItemTitle, type);
+const { type, active, index } = toRefs(props);
+
+const itemBody = ref(null);
+
+watch(active, (newVal, oldVal) => {
+  if (newVal && newVal !== oldVal) {
+    itemBody.value.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+});
 
 </script>
 <style>
@@ -34,6 +46,7 @@ console.log(ItemTitle, type);
   margin-bottom: 8px;
   overflow: hidden;
   padding: 5px;
+  padding-left: 3em;
   border-radius: var(--radius);
   background-color: var(--mainColor);
   box-shadow: -4px -4px 10px #ffffff, 4px 4px 10px #aeaec0;

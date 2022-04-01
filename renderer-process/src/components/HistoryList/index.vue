@@ -1,9 +1,11 @@
 <template>
     <div class="history-list" v-if="list.length">
-        <div v-for="(item,index) in list" :key="item.html + item.text">
+        <div v-for="(item,index) in list" :key="item" >
             <component
+              v-if="item"
               :is="componentIs(item)"
               :item="item"
+              :index="index+1"
               :active="currentIndex===index"
             />
         </div>
@@ -23,18 +25,23 @@ const currentIndex = ref(0);
 onMounted(() => {
   onCopyListUpdate((_, copyList = []) => {
     list.value = copyList;
-    currentIndex.value = 0;
   });
 
-  onChangeActiveIdx((_, direction) => {
-    if (direction === 0) {
+  onChangeActiveIdx((_, { type, val }) => {
+    if (type === 'move') {
+      const result = currentIndex.value + val;
+      if (result < 0) {
+        currentIndex.value = list.value.length - 1;
+      } else if (result >= list.value.length) {
+        currentIndex.value = 0;
+      } else {
+        currentIndex.value = result;
+      }
+    } else if (type === 'select') {
       onSelectedItem(currentIndex.value);
       currentIndex.value = 0;
-    } else {
-      currentIndex.value = Math.min(Math.max(
-        0,
-        currentIndex.value + direction,
-      ), list.value.length - 1);
+    } else if (type === 'jump') {
+      currentIndex.value = Math.min(val, list.value.length - 1);
     }
   });
 });

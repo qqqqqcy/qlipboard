@@ -28,6 +28,7 @@ const { item, active } = toRefs(props);
 </script>
 <style scoped>
   .image-item {
+    border-radius: var(--radius);
     overflow: scroll;
     max-height: 10em;
   }

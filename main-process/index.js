@@ -5,10 +5,17 @@ const {
   BrowserWindow,
   globalShortcut,
 } = require('electron');
-
+const robot = require('robotjs');
+const fs = require('fs');
 const path = require('path');
 const { setWinOnActiveScreen } = require('./utils/screenHelper');
 const { ClipboardEx } = require('./utils/clipboardHelper');
+const { registerShortCut, unregisterShortCut } = require('./utils/globShortcutHelper');
+
+const APP_DATA_PATH = path.join(app.getAppPath('appData'), '.appData');
+if (!fs.existsSync(APP_DATA_PATH)) {
+  fs.mkdirSync(APP_DATA_PATH);
+}
 
 function createWin() {
   const mainWindow = new BrowserWindow({
@@ -26,32 +33,27 @@ function createWin() {
   return mainWindow;
 }
 
-const GLOBAL_SHORTCUT_KEY = ['Up', 'Down', 'Esc', 'Return'];
-
 function hideWin(win) {
   win.hide();
-  GLOBAL_SHORTCUT_KEY.forEach((item) => globalShortcut.unregister(item));
+  unregisterShortCut();
 }
 
 app.whenReady().then(() => {
   const win = createWin();
-  const clipboardEx = new ClipboardEx();
+  const clipboardEx = new ClipboardEx({ dataPath: APP_DATA_PATH });
 
   win.once('ready-to-show', () => {
     globalShortcut.register('Command+Shift+V', () => {
       win.send('copyListUpdate', clipboardEx.orderCopyList);
+
+      // TODO 日志
+      // fs.writeFileSync(path.join(__dirname, 'log.js'), JSON.stringify(clipboardEx.orderCopyList));
+
       setWinOnActiveScreen(win);
       win.showInactive();
 
-      globalShortcut.register('Up', () => {
-        win.send('changeActiveIdx', -1);
-      });
-      globalShortcut.register('Down', () => {
-        win.send('changeActiveIdx', 1);
-      });
-      globalShortcut.register('Return', () => {
-        win.send('changeActiveIdx', 0);
-      });
+      registerShortCut(win);
+
       globalShortcut.register('Esc', () => {
         hideWin(win);
       });
@@ -66,6 +68,7 @@ app.whenReady().then(() => {
   ipcMain.on('selectedItem', (_event, index) => {
     clipboardEx.handlerItemByOrderIndex(index);
     hideWin(win);
+    robot.keyTap('v', ['command']);
   });
 });
 

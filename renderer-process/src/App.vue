@@ -10,7 +10,7 @@ import TheTitle from './components/TheTitle/index.vue';
 import HistoryList from './components/HistoryList/index.vue';
 
 </script>
-
+<style src="./assets/iconfont.css"></style>
 <style>
   body {
     --radius: 5px;
