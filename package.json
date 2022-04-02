@@ -4,17 +4,21 @@
   "private": true,
   "main": "main-process/index.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron . --dev",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
-    "publish": "npm run build && electron-builder",
+    "build:main": "electron-builder",
+    "publish": "yarn build && yarn build:main",
     "postinstall": "cd ./node_modules/robotjs && node-gyp rebuild --runtime=electron --target=16.1.0 --disturl=https://atom.io/download/atom-shell --abi=93"
   },
   "build": {
     "productName": "Qlipboard",
     "appId": "net.quincy.electron.test",
+    "files": [
+      "node_modules",
+      "main-process"
+    ],
     "mac": {
       "icon": "./main-process/assets/app_icon.png"
     }

@@ -8,7 +8,6 @@ const {
   globalShortcut,
 } = require('electron');
 const robot = require('robotjs');
-const fs = require('fs');
 const path = require('path');
 const { setWinOnActiveScreen } = require('./utils/screenHelper');
 const { ClipboardEx } = require('./utils/clipboardHelper');
@@ -17,9 +16,9 @@ const { registerShortCut, unregisterShortCut } = require('./utils/globShortcutHe
 let tray = null;
 
 const APP_DATA_PATH = path.join(app.getAppPath('appData'), '.appData');
-if (!fs.existsSync(APP_DATA_PATH)) {
-  fs.mkdirSync(APP_DATA_PATH);
-}
+// if (!fs.existsSync(APP_DATA_PATH)) {
+//   fs.mkdirSync(APP_DATA_PATH);
+// }
 
 function createWin() {
   const mainWindow = new BrowserWindow({
@@ -28,12 +27,17 @@ function createWin() {
     show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      webSecurity: false,
     },
   });
 
   mainWindow.setAlwaysOnTop(true);
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-  mainWindow.loadURL('http://localhost:8080/');
+  if (process.argv.includes('--dev')) {
+    mainWindow.loadURL('http://localhost:8080/');
+  } else {
+    mainWindow.loadFile(path.join(__dirname, 'dist', 'index.html'));
+  }
   return mainWindow;
 }
 
