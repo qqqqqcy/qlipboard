@@ -29,7 +29,6 @@ const { type } = toRefs(props);
   color: #aeaec0;
   font-size: 12px;
   padding: 0 4px;
-  /* background-color: var(--mainColor); */
   z-index: 1;
 }
 </style>

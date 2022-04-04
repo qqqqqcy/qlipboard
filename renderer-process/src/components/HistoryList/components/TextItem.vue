@@ -28,13 +28,11 @@ const { item, active } = toRefs(props);
 <style scoped>
 .text-item {
   overflow: scroll;
-  /* text-overflow: ellipsis;
-    white-space: pre-wrap;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 6; */
   max-height: 10em;
   background-color: none;
   border-radius: var(--radius);
+  min-height: 1.2em;
+  /* 防止子元素出现 position: fixed */
+  transform: translate(0, 0);
 }
 </style>

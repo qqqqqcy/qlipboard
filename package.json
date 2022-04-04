@@ -9,7 +9,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "build:main": "electron-builder",
-    "publish": "yarn build && yarn build:main",
+    "dist": "yarn build && yarn build:main",
     "postinstall": "cd ./node_modules/robotjs && node-gyp rebuild --runtime=electron --target=16.1.0 --disturl=https://atom.io/download/atom-shell --abi=93"
   },
   "build": {
